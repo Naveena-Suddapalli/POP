@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 const EventCheckIn = ({ contract, account }) => {
   const [eventId, setEventId] = useState('');
   const [checkInStatus, setCheckInStatus] = useState(null);
+
+  const pinataApiKey = "7c6b2d38455b610f76ed"; // ⚠️ In production, don't expose API keys like this!
+  const pinataSecretApiKey = "4148832e09f079b45ce7e6fd7904a7b5853b5b0bfd33ebb9849815e9520e8967";
 
   const handleCheckIn = async () => {
     if (!contract || !account) {
@@ -11,72 +15,95 @@ const EventCheckIn = ({ contract, account }) => {
     }
 
     try {
-      await contract.checkIn(eventId);
-      setCheckInStatus('Successfully checked in! (Mock)');
+      const metadata = {
+        name: `Proof of Presence: ${eventId}`,
+        description: `Attendance NFT for event ${eventId}`,
+        eventId: eventId,
+        attendee: account,
+        timestamp: Math.floor(Date.now() / 1000),
+      };
+
+      const response = await axios.post(
+        'https://api.pinata.cloud/pinning/pinJSONToIPFS',
+        metadata,
+        {
+          headers: {
+            pinata_api_key: pinataApiKey,
+            pinata_secret_api_key: pinataSecretApiKey,
+          },
+        }
+      );
+
+      const tokenURI = `https://orange-acute-quelea-468.mypinata.cloud/ipfs/${response.data.IpfsHash}`;
+
+      const tx = await contract.checkIn(eventId, tokenURI);
+      await tx.wait();
+      setCheckInStatus('✅ Successfully checked in!');
       setEventId('');
     } catch (error) {
       console.error('Check-in error:', error);
-      setCheckInStatus('Failed to check in. (Mock)');
+
+      let message = "Unknown error";
+
+      // Extract clean error reason
+      if (error.error && error.error.data && error.error.data.message) {
+        message = error.error.data.message;
+      } else if (error.reason) {
+        message = error.reason;
+      } else if (error.data && error.data.message) {
+        message = error.data.message;
+      } else if (error.message) {
+        message = error.message;
+      }
+
+      // Clean "execution reverted:" prefix
+      message = message.replace("execution reverted: ", "");
+
+      setCheckInStatus('❌ Failed to check in: ' + message);
     }
   };
 
   return (
-    <div
-      style={{
-        backgroundColor: 'white',
-        padding: '1.5rem',
-        borderRadius: '8px',
-        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-      }}
-    >
-      <h2
-        style={{
-          fontSize: '1.5rem',
-          fontWeight: '600',
-          marginBottom: '1rem',
-          color: '#1f2937',
-        }}
-      >
-        Check In to Event
-      </h2>
-      <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+    <div className="card">
+      <h2>Check In to Event</h2>
+      <div className="checkin-form">
         <input
           type="text"
           placeholder="Enter Event ID"
           value={eventId}
           onChange={(e) => setEventId(e.target.value)}
           style={{
-            flex: 1,
+            width: '100%',
             padding: '0.5rem',
-            border: '1px solid #d1d5db',
-            borderRadius: '8px',
-            fontSize: '1rem',
-            outline: 'none',
-            transition: 'border-color 0.3s',
+            marginBottom: '1rem',
+            borderRadius: '0.5rem',
+            border: '1px solid #ccc',
           }}
-          onFocus={(e) => (e.target.style.borderColor = '#3b82f6')}
-          onBlur={(e) => (e.target.style.borderColor = '#d1d5db')}
         />
         <button
           onClick={handleCheckIn}
           style={{
             backgroundColor: '#16a34a',
             color: 'white',
-            padding: '0.5rem 1rem',
             border: 'none',
-            borderRadius: '8px',
-            fontWeight: '600',
+            padding: '0.5rem 1rem',
+            borderRadius: '0.5rem',
             cursor: 'pointer',
-            transition: 'background-color 0.3s',
           }}
-          onMouseOver={(e) => (e.target.style.backgroundColor = '#15803d')}
-          onMouseOut={(e) => (e.target.style.backgroundColor = '#16a34a')}
         >
           Check In
         </button>
       </div>
+
       {checkInStatus && (
-        <p style={{ marginTop: '1rem', color: '#4b5563', fontSize: '0.9rem' }}>
+        <p
+          style={{
+            marginTop: '1rem',
+            textAlign: 'center',
+            color: checkInStatus.includes('Failed') ? '#dc2626' : '#16a34a',
+            fontWeight: '500',
+          }}
+        >
           {checkInStatus}
         </p>
       )}

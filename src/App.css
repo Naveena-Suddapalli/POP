@@ -1,62 +1,359 @@
 .app-container {
   min-height: 100vh;
-  background: linear-gradient(to bottom right, #e6f0fa, #ffffff);
   display: flex;
   flex-direction: column;
+  background: linear-gradient(to bottom right, #f5f3ff, #ede9fe);
 }
 
 .app-header {
-  background-color: #1e40af;
+  background: linear-gradient(to right, #6d28d9, #8b5cf6);
   color: white;
-  padding: 1rem;
+  padding: 2rem 1rem;
   text-align: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.header-content {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.header-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.logo-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid white;
 }
 
 .app-header h1 {
   margin: 0;
   font-size: 2.5rem;
-  font-weight: bold;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+.app-header p {
+  margin: 0.5rem 0 1rem;
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+.header-nav {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.nav-link {
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.2rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.nav-link-attendee {
+  color: #f97316;
+  background-color: rgba(249, 115, 22, 0.1);
+}
+
+.nav-link-attendee:hover {
+  color: #fb923c;
+  background-color: rgba(249, 115, 22, 0.2);
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.nav-link-organizer {
+  color: #22d3ee;
+  background-color: rgba(34, 211, 238, 0.1);
+}
+
+.nav-link-organizer:hover {
+  color: #67e8f9;
+  background-color: rgba(34, 211, 238, 0.2);
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.nav-link-active {
+  position: relative;
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.nav-link-active::after {
+  content: '';
+  position: absolute;
+  bottom: 0.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50%;
+  height: 2px;
+  background-color: white;
 }
 
 .app-main {
   flex: 1;
   max-width: 800px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
-.wallet-section {
+.wallet-section,
+.create-event-section,
+.checkin-section,
+.nft-section {
   margin-bottom: 2rem;
-  text-align: center;
 }
 
 .connected-account {
   margin-top: 1rem;
   color: #4b5563;
   font-size: 1rem;
-}
-
-.checkin-section,
-.nft-section {
-  margin-bottom: 2rem;
+  font-weight: 500;
+  text-align: center;
 }
 
 .app-footer {
-  background-color: #1f2937;
+  background: linear-gradient(to right, #6d28d9, #8b5cf6);
   color: white;
   text-align: center;
-  padding: 1rem;
+  padding: 1.5rem;
   font-size: 0.9rem;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Responsive adjustments */
+/* Card Styling for Sections */
+.card {
+  background-color: #ffffff;
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.05;
+  z-index: 0;
+}
+
+.create-event-section .card::before {
+  background: linear-gradient(rgba(109, 40, 217, 0.5), rgba(255, 255, 255, 0.3)), url('https://via.placeholder.com/1280x720?text=Event+Planning') center/cover no-repeat;
+}
+
+.checkin-section .card::before,
+.nft-section .card::before {
+  background: linear-gradient(rgba(109, 40, 217, 0.5), rgba(255, 255, 255, 0.3)), url('https://via.placeholder.com/1280x720?text=Crowd+Event') center/cover no-repeat;
+}
+
+.card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.card h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #1f2937;
+}
+
+/* Input and Button Styling */
+input[type="text"],
+input[type="datetime-local"] {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  margin-bottom: 1rem;
+}
+
+input[type="text"]:focus,
+input[type="datetime-local"]:focus {
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+
+button[style*="background-color: #6d28d9"] {
+  background-color: #6d28d9;
+}
+
+button[style*="background-color: #6d28d9"]:hover {
+  background-color: #8b5cf6;
+}
+
+button[style*="background-color: #16a34a"] {
+  background-color: #16a34a;
+}
+
+button[style*="background-color: #16a34a"]:hover {
+  background-color: #22c55e;
+}
+
+/* Check-In Form Styling */
+.checkin-form {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.checkin-form input {
+  flex: 1;
+}
+
+/* NFT Card Styling */
+.nft-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.nft-card {
+  padding: 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background-color: #f9fafb;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.nft-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.nft-card h3 {
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+}
+
+.nft-card p {
+  color: #1f2937;
+  margin: 0.25rem 0;
+}
+
+.nft-card a {
+  color: #6d28d9;
+  text-decoration: underline;
+  transition: color 0.3s ease;
+}
+
+.nft-card a:hover {
+  color: #8b5cf6;
+}
+
+/* Status Message Styling */
+.status-message {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: 500;
+  word-wrap: break-word; /* Ensure long error messages wrap */
+}
+
+.status-success {
+  background-color: rgba(22, 163, 74, 0.1); /* Light green background */
+  color: #16a34a;
+}
+
+.status-error {
+  background-color: rgba(220, 38, 38, 0.1); /* Light red background */
+  color: #dc2626;
+}
+
+/* Responsive Adjustments */
 @media (max-width: 600px) {
   .app-header h1 {
     font-size: 2rem;
   }
 
+  .app-header p {
+    font-size: 1rem;
+  }
+
   .app-main {
     padding: 1rem;
+  }
+
+  .card {
+    padding: 1rem;
+  }
+
+  .card h2 {
+    font-size: 1.25rem;
+  }
+
+  button {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .checkin-form {
+    flex-direction: column;
+  }
+
+  .checkin-form input,
+  .checkin-form button {
+    width: 100%;
+  }
+
+  .header-nav {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .nav-link {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+  }
+
+  .header-logo {
+    flex-direction: row;
+    gap: 0.5rem;
   }
 }

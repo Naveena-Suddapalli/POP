@@ -1,33 +1,45 @@
 import React from 'react';
-import { getMockContract } from '../utils/contractConfig';
+import { ethers } from 'ethers';
+import { contractAddress, contractABI } from '../utils/contractConfig';
 
 const WalletConnect = ({ setAccount, setContract }) => {
-  const connectWallet = () => {
-    const mockAccount = '0xMockAccount1234567890abcdef';
-    setAccount(mockAccount);
+  const connectWallet = async () => {
+    if (window.ethereum) {
+      try {
+        // Request accounts from MetaMask
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const account = accounts[0];
+        setAccount(account);
 
-    const mockContract = getMockContract();
-    setContract(mockContract);
+        // Validate contract address
+        if (!ethers.utils.isAddress(contractAddress)) {
+          throw new Error('Invalid contract address');
+        }
 
-    console.log('Mock wallet connected:', mockAccount);
+        // Use Web3Provider to connect through MetaMask
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        const contract = new ethers.Contract(contractAddress, contractABI, signer);
+        setContract(contract);
+
+        console.log('Wallet connected:', account);
+      } catch (error) {
+        console.error('Wallet connection error:', error);
+        alert('Failed to connect wallet: ' + error.message);
+      }
+    } else {
+      alert('Please install MetaMask!');
+    }
   };
 
   return (
-    <div>
+    <div className="wallet-connect">
       <button
         onClick={connectWallet}
         style={{
-          backgroundColor: '#1e40af',
+          backgroundColor: '#6d28d9',
           color: 'white',
-          padding: '0.5rem 1.5rem',
-          border: 'none',
-          borderRadius: '8px',
-          fontWeight: '600',
-          cursor: 'pointer',
-          transition: 'background-color 0.3s',
         }}
-        onMouseOver={(e) => (e.target.style.backgroundColor = '#1e3a8a')}
-        onMouseOut={(e) => (e.target.style.backgroundColor = '#1e40af')}
       >
         Connect Wallet
       </button>
