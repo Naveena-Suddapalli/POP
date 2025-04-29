@@ -15,15 +15,31 @@ const CreateEvent = ({ contract, account }) => {
     try {
       const startTimestamp = Math.floor(new Date(startTime).getTime() / 1000);
       const endTimestamp = Math.floor(new Date(endTime).getTime() / 1000);
+
       const tx = await contract.createEvent(eventId, startTimestamp, endTimestamp);
       await tx.wait();
-      setStatus('Event created successfully!');
+      setStatus('✅ Event created successfully!');
       setEventId('');
       setStartTime('');
       setEndTime('');
     } catch (error) {
       console.error('Event creation error:', error);
-      setStatus('Failed to create event: ' + error.message);
+
+      let message = "Unknown error";
+
+      if (error.error && error.error.data && error.error.data.message) {
+        message = error.error.data.message;
+      } else if (error.reason) {
+        message = error.reason;
+      } else if (error.data && error.data.message) {
+        message = error.data.message;
+      } else if (error.message) {
+        message = error.message;
+      }
+
+      message = message.replace("execution reverted: ", "");
+
+      setStatus('❌ Failed to create event: ' + message);
     }
   };
 
@@ -52,9 +68,12 @@ const CreateEvent = ({ contract, account }) => {
         <button
           onClick={handleCreateEvent}
           style={{
-            backgroundColor: '#6d28d9', // Match other buttons
+            backgroundColor: '#6d28d9',
             color: 'white',
             width: '100%',
+            marginTop: '1rem',
+            padding: '0.5rem',
+            borderRadius: '0.5rem',
           }}
         >
           Create Event
@@ -63,6 +82,12 @@ const CreateEvent = ({ contract, account }) => {
       {status && (
         <div
           className={`status-message ${status.includes('Failed') ? 'status-error' : 'status-success'}`}
+          style={{
+            marginTop: '1rem',
+            color: status.includes('Failed') ? '#dc2626' : '#16a34a',
+            fontWeight: '500',
+            textAlign: 'center',
+          }}
         >
           <p>{status}</p>
         </div>
