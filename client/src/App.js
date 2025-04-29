@@ -22,6 +22,14 @@ function App() {
             </div>
             <p>Securely verify event attendance with blockchain technology.</p>
             <nav className="header-nav">
+            <NavLink
+                to="/organizer"
+                className={({ isActive }) =>
+                  isActive ? "nav-link nav-link-organizer nav-link-active" : "nav-link nav-link-organizer"
+                }
+              >
+                Organizer Dashboard
+              </NavLink>
               <NavLink
                 to="/"
                 className={({ isActive }) =>
@@ -29,14 +37,6 @@ function App() {
                 }
               >
                 Attendee Dashboard
-              </NavLink>
-              <NavLink
-                to="/organizer"
-                className={({ isActive }) =>
-                  isActive ? "nav-link nav-link-organizer nav-link-active" : "nav-link nav-link-organizer"
-                }
-              >
-                Organizer Dashboard
               </NavLink>
             </nav>
           </div>
