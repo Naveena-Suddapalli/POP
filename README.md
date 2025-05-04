@@ -2,8 +2,6 @@
 
 > Secure, soulbound NFT-based event attendance verification system built on Ethereum
 
-[![Vercel](https://vercelbadge.vercel.app/api/Naveena-Suddapalli/POP)](https://pop-xi-virid.vercel.app/)
-
 ## Demo & Links
 
 - **Live Demo**
