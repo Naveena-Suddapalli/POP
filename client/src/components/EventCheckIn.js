@@ -1,20 +1,40 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
+/**
+ * EventCheckIn Component
+ * Handles event attendance check-ins and NFT minting.
+ * Features:
+ * - IPFS metadata creation and pinning
+ * - Smart contract interaction for check-ins
+ * - Error handling with user feedback
+ * 
+ * @param {Object} contract - The smart contract instance
+ * @param {String} account - User's Ethereum address
+ */
 const EventCheckIn = ({ contract, account }) => {
+  // State for form management and status updates
   const [eventId, setEventId] = useState('');
   const [checkInStatus, setCheckInStatus] = useState(null);
 
-  const pinataApiKey = "7c6b2d38455b610f76ed"; // ⚠️ In production, don't expose API keys like this!
-  const pinataSecretApiKey = "4148832e09f079b45ce7e6fd7904a7b5853b5b0bfd33ebb9849815e9520e8967";
+  // Pinata API keys for IPFS integration
+  const pinataApiKey = process.env.REACT_APP_PINATA_API_KEY;
+  const pinataSecretApiKey = process.env.REACT_APP_PINATA_SECRET_API_KEY;
 
+  /**
+   * Handles the check-in process
+   * 1. Creates metadata for NFT
+   * 2. Pins data to IPFS via Pinata
+   * 3. Calls smart contract to mint NFT
+   */
   const handleCheckIn = async () => {
     if (!contract || !account) {
-      alert('Please connect your wallet first!');
+      alert('Please connect your wallet first!'); // Ensure wallet is connected
       return;
     }
 
     try {
+      // Metadata for the attendance NFT
       const metadata = {
         name: `Proof of Presence: ${eventId}`,
         description: `Attendance NFT for event ${eventId}`,
@@ -23,6 +43,7 @@ const EventCheckIn = ({ contract, account }) => {
         timestamp: Math.floor(Date.now() / 1000),
       };
 
+      // Pin metadata to IPFS using Pinata
       const response = await axios.post(
         'https://api.pinata.cloud/pinning/pinJSONToIPFS',
         metadata,
@@ -34,10 +55,12 @@ const EventCheckIn = ({ contract, account }) => {
         }
       );
 
+      // Construct token URI from IPFS hash
       const tokenURI = `https://orange-acute-quelea-468.mypinata.cloud/ipfs/${response.data.IpfsHash}`;
 
+      // Call the smart contract's check-in function
       const tx = await contract.checkIn(eventId, tokenURI);
-      await tx.wait();
+      await tx.wait(); // Wait for transaction confirmation
       setCheckInStatus('✅ Successfully checked in!');
       setEventId('');
     } catch (error) {
@@ -63,6 +86,7 @@ const EventCheckIn = ({ contract, account }) => {
     }
   };
 
+  // Render component UI with form and status message
   return (
     <div className="card">
       <h2>Check In to Event</h2>

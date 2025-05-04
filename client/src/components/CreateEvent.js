@@ -1,11 +1,29 @@
 import React, { useState } from 'react';
 
+/**
+ * CreateEvent Component
+ * Allows organizers to create new time-bound events.
+ * Features:
+ * - DateTime validation
+ * - Smart contract event creation
+ * - Error handling with feedback
+ * 
+ * @param {Object} contract - The smart contract instance
+ * @param {String} account - Organizer's Ethereum address
+ */
 const CreateEvent = ({ contract, account }) => {
+  // State management for form inputs and status
   const [eventId, setEventId] = useState('');
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
   const [status, setStatus] = useState(null);
 
+  /**
+   * Handles event creation process
+   * 1. Validates input times
+   * 2. Converts to UNIX timestamps
+   * 3. Creates event on blockchain
+   */
   const handleCreateEvent = async () => {
     if (!contract || !account) {
       alert('Please connect your wallet first!');
@@ -43,6 +61,7 @@ const CreateEvent = ({ contract, account }) => {
     }
   };
 
+  // Render form UI with validation feedback
   return (
     <div className="card">
       <h2>Create Event</h2>

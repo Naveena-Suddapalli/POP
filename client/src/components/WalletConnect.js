@@ -2,7 +2,20 @@ import React from 'react';
 import { ethers } from 'ethers';
 import { contractAddress, contractABI } from '../utils/contractConfig';
 
+/**
+ * WalletConnect Component
+ * Handles MetaMask wallet connection and contract initialization
+ * 
+ * @param {Function} setAccount - Updates the connected account address
+ * @param {Function} setContract - Updates the contract instance
+ */
 const WalletConnect = ({ setAccount, setContract }) => {
+  /**
+   * Connects to MetaMask wallet and initializes contract
+   * 1. Requests account access
+   * 2. Validates contract address
+   * 3. Creates contract instance
+   */
   const connectWallet = async () => {
     if (window.ethereum) {
       try {

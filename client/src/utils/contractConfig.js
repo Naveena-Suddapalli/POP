@@ -1,5 +1,4 @@
-export const contractAddress = "0x3f0f7682Ded761DaC1A0fa0bFe3f6EB5efFb1279";
-
+export const contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS;
 export const contractABI = [
   {
     name: 'createEvent',
