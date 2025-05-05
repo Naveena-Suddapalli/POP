@@ -66,18 +66,3 @@
    npm start
    ```
    Visit http://localhost:3000 and connect MetaMask
-
-## 🌐 Deployment
-
-### Vercel Deployment
-
-1. Connect your GitHub repository to Vercel
-2. Configure environment variables:
-   - `REACT_APP_PINATA_API_KEY`
-   - `REACT_APP_PINATA_SECRET_API_KEY`
-3. Deploy!
-
-### Available Scripts
-
-- `npm start` - Start development server
-- `npm run build` - Create production build
