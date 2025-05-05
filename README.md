@@ -5,8 +5,7 @@
 ## Demo & Links
 
 - **Live Demo**
-  - [Organizer Dashboard](https://pop-xi-virid.vercel.app/organizer)
-  - [Attendee Dashboard](https://pop-xi-virid.vercel.app/attendee)
+  -[Dashboard](https://pop-xi-virid.vercel.app/organizer)
 - [Video Tutorial](https://youtu.be/i3aLl_BxqFk)
 - [GitHub Repository](https://github.com/Naveena-Suddapalli/POP)
 
