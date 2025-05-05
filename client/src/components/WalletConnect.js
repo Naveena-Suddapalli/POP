@@ -17,6 +17,11 @@ const WalletConnect = ({ setAccount, setContract }) => {
    * 3. Creates contract instance
    */
   const connectWallet = async () => {
+    if (!contractAddress) {
+      alert('Contract address not configured!');
+      return;
+    }
+
     if (window.ethereum) {
       try {
         // Request accounts from MetaMask
