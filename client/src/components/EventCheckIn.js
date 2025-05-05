@@ -18,8 +18,8 @@ const EventCheckIn = ({ contract, account }) => {
   const [checkInStatus, setCheckInStatus] = useState(null);
 
   // Pinata API keys for IPFS integration
-  const pinataApiKey = process.env.REACT_APP_PINATA_API_KEY;
-  const pinataSecretApiKey = process.env.REACT_APP_PINATA_SECRET_API_KEY;
+  const pinataApiKey = "7c6b2d38455b610f76ed";
+  const pinataSecretApiKey = "4148832e09f079b45ce7e6fd7904a7b5853b5b0bfd33ebb9849815e9520e8967";
 
   /**
    * Handles the check-in process
